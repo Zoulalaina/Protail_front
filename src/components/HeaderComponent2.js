@@ -4,9 +4,14 @@ import { Link } from 'react-router-dom';
 import EmployeeService from "../services/EmployeeService";
 import {FaSearch} from "react-icons/fa"
 import logo from "../assets/logo.jpg"
-
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 const HeaderComponent2 = () =>{
     const [message, setMessage] = useState("")
+    const dispatch = useDispatch();
+    
+  const token = useSelector((state) => state.token);
+
 
     useEffect(()=>{
         getStatus();
@@ -34,22 +39,19 @@ const HeaderComponent2 = () =>{
     }
 
     const logout = ()=>{
+
+        dispatch({ type: 'CLEAR_TOKEN'});
+    
         
-        EmployeeService.logout().then((response)=>{
-            console.log(response.data)
-            
-        }).catch(error=>{
-            console.log(error);
-        })
 
 
     }
     const title = ()=>{
-        if(message=="login success"){
-            return <Link to = "/" className="navbar-brand" onClick={logout}>Deconnexion</Link>  
+        if(token!=null){
+            return <Link to = "/" className="navbar-brand" onClick={logout}>Deconnexion </Link>  
         }else{
             return <div>
-                        <Link to = "/register" className="navbar-brand">S'inscrire</Link>   
+                          
                         <Link to = "/login" className="navbar-brand">Connexion</Link> 
                     
                     </div>
@@ -67,9 +69,10 @@ const HeaderComponent2 = () =>{
                 <div>
                 <nav className="navbar navbar-expand-md navbar-dark bg-dark">
                     <div>
-                        <Link to = "/home" className="navbar-brand">Accueil</Link>   
+                        <Link to = "/" className="navbar-brand">Accueil</Link>   
                     </div>
-                    <Link to = "/home" className="navbar-brand">Universités</Link>
+                    <Link to = "/" className="navbar-brand">Universités</Link>
+                    <Link to = "/apropos" className="navbar-brand">Apropos</Link> 
                     <div>
                          
                         {

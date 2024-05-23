@@ -1,96 +1,69 @@
-import axios from "axios";
-import React, { useState } from "react";
-import {useNavigate} from 'react-router-dom';
-import HeaderComponent from "./HeaderComponent";
+// src/components/Login.js
 
-function Login(){
-
-    const [email, setEmail]=useState("");
-    const [password, setPassword]=useState("");
-    const navigate = useNavigate();
-
-    async function login(e){
-        e.preventDefault();
-        try{
-            await axios.post("http://localhost:8080/api/v1/user/login", {
-                email: email,
-                password: password,
-            }).then((res)=> 
-            {
-                 
-                
-                if(res.data.message=="Email not exist"){
-                    alert("email not exist");
-                    
-
-                } else if(res.data.message=="login success"){
-                    navigate("/home");
-                    
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 
-                }else{
-                    alert("erreur");
-                }
+const Login = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
 
-            }, fail => {
-                console.error(fail);
-            });
-
-
-        }catch(err){
-            alert(err);
-        }
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post("http://localhost:8080/api/v1/users/connexion", { username, password });
+      // Save JWT token from response to local storage
+      const token =response.data.bearer;
+      dispatch({ type: 'SET_TOKEN', payload: token });
+      sessionStorage.setItem("token",response.data.bearer);
+      // Redirect to profile page or other authorized routes
+      navigate("/home");
+      console.log(response.data.bearer);
+      console.log(sessionStorage.getItem("token"));
+      // ...
+    } catch (error) {
+      console.error('Login failed:', error);
     }
+  };
 
+  return (
+    <div>
+      <div className="container">
+        <div className="row">
+        <div className="card col-md-6 offset-md-3 offset-md-3">
+        <h2 className='text-center'>Connexion</h2>
+        <div className="card-body">   
+        <div className="form-group mb-2">   
+      <input
+        type="text"
+        placeholder="Entrez votre email"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        className = "form-control"
+      />
+      </div>
+      <div className="form-group mb-2">   
+      <input
+        type="password"
+        placeholder="Entrez votre mot de passe"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        className = "form-control"
+      />
+      </div>
+      <button onClick={handleLogin} className = "btn btn-primary">Connexion</button>
+      <Link to="/register">Vous n'avez pas du compte?</Link>
+      </div>
 
+      </div>
+      </div>
+      </div>
+    </div>
+  );
+};
 
-
-
-    return(
-        <div>
-            <div className="container">
-                <div className="row">
-                    <h1>Login</h1>
-                    <hr/>
-
-
-                </div>
-                <div className="row">
-                    <div className="col-sm-6">
-                        <form>
-                            <div className="form group">
-                                <label>Email</label>
-                                <input type="email" className="form-control" id="email" placeholder="Enter your email"
-                                value={email}
-                                onChange={(e)=>{
-                                    setEmail(e.target.value);
-                                }}/>
-
-
-                            </div>
-                            <div className="form group">
-                                <label>Password</label>
-                                <input type="password" className="form-control" id="password" placeholder="Enter your password"
-                                value={password}
-                                onChange={(e)=>{
-                                    setPassword(e.target.value);
-                                }}/>
-                                
-
-                            </div>
-                            <button type="submit" className="btn btn-primary" onClick={login}>Login</button>
-                        </form>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-        
-
-
-    );
-}
 export default Login;

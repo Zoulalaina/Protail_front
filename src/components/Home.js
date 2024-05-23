@@ -9,9 +9,10 @@ const Home=()=>{
         getAllUniversite();
     }, [])
     const getAllUniversite=()=>{
-        UnivService.getAllUniv().then((response)=>{
+        UnivService.getAllUniv2().then((response)=>{
             setUniversites(response.data)
             console.log(response.data);
+            console.log(sessionStorage.getItem("token"));
 
         }).catch(error =>{
             console.log(error);
@@ -22,7 +23,7 @@ const Home=()=>{
     return(
         <div>
             <div className="container">
-                <h1 className="text-center">Les Universités Publiques Malagasy</h1>
+                <h1 className="text-center">Les universités publiques malagasy</h1>
                 <div className="liste">
                     
                         {universites.map(universite=>(

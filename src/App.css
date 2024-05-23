@@ -43,11 +43,11 @@
     flex-wrap: wrap;
     /* align-content: revert-layer; */
     justify-content: space-between;
-    margin-top: 30px;
+    
     
 }
 .container{
-  margin-top: 10px;
+  
   margin-block-end: 80px;
 }
 .input-wapper{
@@ -55,6 +55,8 @@
   border-radius: 10px;
   margin-right: 10px;
   border: outset;
+  max-height: 100px;
+  overflow-y: scroll;
 
 }
 .input-text{
@@ -84,4 +86,15 @@
 }
 .univ{
   margin-bottom: 30px;
+}
+.flex{
+  display: flex;
+}
+.recherche{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.recherche2{
+  border: solid;
 }
